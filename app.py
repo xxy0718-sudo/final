@@ -5,36 +5,76 @@ from charts import (
     genre_chart,
     release_trend_chart,
     rating_chart,
-    style_chart,
-    budget_rating_chart
+    country_chart,
+    budget_rating_chart,
+    top_movies_chart
 )
-from visual_style import visual_style_summary
 
 # --------------------------------------------------
-# Page Config
+# Page Configuration
 # --------------------------------------------------
 st.set_page_config(
-    page_title="Movie Visual Trends Dashboard",
+    page_title="Movie Genre & Audience Trends Dashboard",
+    page_icon="🎬",
     layout="wide"
+)
+
+# --------------------------------------------------
+# Custom CSS
+# --------------------------------------------------
+st.markdown(
+    """
+    <style>
+    .main {
+        background-color: #0E1117;
+        color: white;
+    }
+
+    h1 {
+        color: #FF4B4B;
+        text-align: center;
+    }
+
+    h2, h3 {
+        color: #F9F9F9;
+         }
+
+    .stMetric {
+        background-color: #1E1E1E;
+        padding: 15px;
+        border-radius: 15px;
+        border: 1px solid #333333;
+    }
+
+    .custom-card {
+        background-color: #1A1D24;
+        padding: 20px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
 )
 
 # --------------------------------------------------
 # Load Data
 # --------------------------------------------------
 df = load_data()
-
-# --------------------------------------------------
-# Sidebar Filters
-# --------------------------------------------------
 filtered_df = sidebar_filters(df)
 
 # --------------------------------------------------
-# Title
+# Header Section
 # --------------------------------------------------
-st.title("🎬 Movie Visual Trends Dashboard")
+st.title("🎬 Movie Genre & Audience Trends Dashboard")
 
 st.markdown(
-    "Analyze movie genres, ratings, release trends, and cinematic visual styles through interactive data visualization."
+    """
+    <div class='custom-card'>
+    Explore movie genres, ratings, audience preferences, and global film trends through interactive data visualization.
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
 # --------------------------------------------------
@@ -42,33 +82,63 @@ st.markdown(
 # --------------------------------------------------
 st.subheader("📊 Dashboard Overview")
 
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.metric("Total Movies", len(filtered_df))
+    st.metric("🎞 Total Movies", len(filtered_df))
 
 with col2:
-    st.metric("Average Rating", round(filtered_df['Rating'].mean(), 1))
+    st.metric("⭐ Average Rating", round(filtered_df['Rating'].mean(), 1))
 
 with col3:
-    st.metric("Average Budget", f"${round(filtered_df['Budget'].mean(), 1)}M")
+    st.metric("🌍 Countries", filtered_df['Country'].nunique())
+
+with col4:
+    st.metric("💰 Average Budget", f"${round(filtered_df['Budget'].mean(), 1)}M")
 
 # --------------------------------------------------
 # Dataset Table
 # --------------------------------------------------
-st.subheader("🎞 Movie Dataset")
-st.dataframe(filtered_df)
+st.subheader("🎥 Movie Dataset")
+st.dataframe(filtered_df, use_container_width=True)
 
 # --------------------------------------------------
-# Charts
+# Charts Layout
 # --------------------------------------------------
-genre_chart(filtered_df)
-release_trend_chart(filtered_df)
-rating_chart(filtered_df)
-style_chart(filtered_df)
+colA, colB = st.columns(2)
+
+with colA:
+    genre_chart(filtered_df)
+
+with colB:
+    release_trend_chart(filtered_df)
+
+colC, colD = st.columns(2)
+
+with colC:
+    rating_chart(filtered_df)
+
+with colD:
+    country_chart(filtered_df)
+
+# --------------------------------------------------
+# Full Width Charts
+# --------------------------------------------------
 budget_rating_chart(filtered_df)
 
+top_movies_chart(filtered_df)
+
 # --------------------------------------------------
-# Visual Style Summary
+# Footer
 # --------------------------------------------------
-visual_style_summary()
+st.markdown("---")
+
+st.markdown(
+    """
+    <center>
+    🎬 Movie Genre & Audience Trends Dashboard <br>
+    Created with Streamlit & Plotly
+    </center>
+    """,
+    unsafe_allow_html=True
+)
