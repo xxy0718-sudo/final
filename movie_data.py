@@ -14,7 +14,7 @@ def load_data():
             "Drama", "Action", "Animation", "Sci-Fi",
             "Romance", "Horror"
         ],
-      
+
         "Country": [
             "USA", "USA", "Korea", "USA",
             "USA", "USA", "Japan", "USA",
