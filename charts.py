@@ -2,6 +2,7 @@ import streamlit as st
 import plotly.express as px
 
 
+# --------------------------------------------------
 # Genre Distribution
 # --------------------------------------------------
 def genre_chart(df):
@@ -10,12 +11,14 @@ def genre_chart(df):
     fig = px.pie(
         df,
         names="Genre",
+        hole=0.4,
         title="Movie Genre Distribution"
     )
 
     st.plotly_chart(fig, use_container_width=True)
 
 
+# --------------------------------------------------
 # Release Year Trends
 # --------------------------------------------------
 def release_trend_chart(df):
@@ -30,10 +33,11 @@ def release_trend_chart(df):
         markers=True,
         title="Movies Released by Year"
     )
-  
+
     st.plotly_chart(fig, use_container_width=True)
 
 
+# --------------------------------------------------
 # Ratings
 # --------------------------------------------------
 def rating_chart(df):
@@ -50,24 +54,26 @@ def rating_chart(df):
     st.plotly_chart(fig, use_container_width=True)
 
 
-# Visual Style
 # --------------------------------------------------
-def style_chart(df):
-    st.subheader("🎨 Visual Style Analysis")
+# Country Distribution
+# --------------------------------------------------
+def country_chart(df):
+    st.subheader("🌍 Country Distribution")
 
-    style_count = df.groupby("Visual_Style").size().reset_index(name="Count")
+    country_count = df.groupby("Country").size().reset_index(name="Count")
 
     fig = px.bar(
-        style_count,
-        x="Visual_Style",
+        country_count,
+        x="Country",
         y="Count",
-        color="Visual_Style",
-        title="Visual Style Distribution"
+        color="Country",
+        title="Movies by Country"
     )
-
+    
     st.plotly_chart(fig, use_container_width=True)
 
 
+# --------------------------------------------------
 # Budget vs Rating
 # --------------------------------------------------
 def budget_rating_chart(df):
@@ -77,10 +83,29 @@ def budget_rating_chart(df):
         df,
         x="Budget",
         y="Rating",
-        color="Visual_Style",
+        color="Genre",
         size="Budget",
         hover_name="Movie",
         title="Budget and Audience Rating"
+    )
+
+    st.plotly_chart(fig, use_container_width=
+    
+
+# --------------------------------------------------
+# Top Movies
+# --------------------------------------------------
+def top_movies_chart(df):
+    st.subheader("🏆 Top Rated Movies")
+
+    top_df = df.sort_values(by="Rating", ascending=False)
+
+    fig = px.bar(
+        top_df,
+        x="Movie",
+        y="Rating",
+        color="Rating",
+        title="Top Rated Movies"
     )
 
     st.plotly_chart(fig, use_container_width=True)
